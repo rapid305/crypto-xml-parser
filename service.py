@@ -14,7 +14,7 @@ CARDS = ("CARDRUB" , "TCSBRUB" , "SBERRUB", "SBPRUB")
 class ParseService:
     def __init__(self):
         self.parse_url = os.getenv('PARSE_URL')
-        self.timeout = int(os.getenv('PARSE_INTERVAL'))
+        self.timeout = 10
 
         if not self.parse_url:
             logger.warning("PARSE_URL is not set!")
@@ -48,7 +48,7 @@ class ParseService:
     #     <from>BTC</from>
     #     <to>CARDRUB</to>
     #     <in>1</in>
-    #     <out>6000000</out>
+    #     <out>6200000</out>
     #     <amount>10</amount>
     #     <param>manual</param>
     # </item>
@@ -118,12 +118,12 @@ class ParseService:
                         card_out = price
                         crypto_out = reverse_out
                         if crypto_out > card_out:
-                            result.append(f"{from_} → {to_} ({card_out:.4f}) > {to_} → {from_} ({crypto_out:.4f})")
+                            result.append(f"{to_} → {from_} ({crypto_out:.4f}) {from_} → {to_} ({card_out:.4f})")
                     elif to_ in CARDS:
                         card_out = reverse_out
                         crypto_out = price
                         if crypto_out > card_out:
-                            result.append(f"{to_} → {from_} ({card_out:.4f}) > {from_} → {to_} ({crypto_out:.4f})")
+                            result.append(f"{from_} → {to_} ({crypto_out:.4f}) > {to_} → {from_} ({card_out:.4f}))")
 
             if result:
                 logger.info(f"Found {len(result)} pairs with different rates")

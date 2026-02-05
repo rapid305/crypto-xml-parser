@@ -17,7 +17,7 @@ load_dotenv()
 
 
 TOKEN = os.getenv('BOT_TOKEN')
-PARSE_INTERVAL = int(os.getenv('PARSE_INTERVAL', '60'))
+PARSE_INTERVAL = int(os.getenv('PARSE_INTERVAL'))
 MAX_MESSAGE_LENGTH = 4000
 
 
