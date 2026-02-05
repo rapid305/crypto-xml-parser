@@ -14,15 +14,21 @@ CARDS = ("CARDRUB" , "TCSBRUB" , "SBERRUB", "SBPRUB")
 class ParseService:
     def __init__(self):
         self.parse_url = os.getenv('PARSE_URL')
-        self.timeout = 10
+        self.timeout = 15
+        # # Заголовки для имитации браузера
+        # self.headers = {
+        #     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        #     "Accept": "application/xml, text/xml, */*",
+        #     "Accept-Language": "ru-RU,ru;q=0.9,en-US;q=0.8,en;q=0.7",
+        # }
 
         if not self.parse_url:
             logger.warning("PARSE_URL is not set!")
 
     async def get_request(self) -> str:
         """Makes an asynchronous GET request to the parse URL."""
-        async with httpx.AsyncClient(timeout=self.timeout) as client:
-            response = await client.get(self.parse_url)
+        async with httpx.AsyncClient(timeout=self.timeout, follow_redirects=True) as client:
+            response = await client.get(self.parse_url, headers=self.headers)
             response.raise_for_status()
             return response.text
 
@@ -83,8 +89,7 @@ class ParseService:
         Parses XML from the parse URL and filters items based on the course value.
         """
         try:
-            text = await self.get_request() # Use actual request
-            # text = self.data_test()  # Use test data
+            text = await self.get_request()
             root = ET.fromstring(text)
 
             result = [] # To store the final results
@@ -104,7 +109,7 @@ class ParseService:
                 rates[(from_, to_)] = price
 
             checked = set() # To avoid duplicate checks
-            for (from_, to_), price  in rates.items():
+            for (from_, to_), price in rates.items():
                 if (from_, to_) in checked:
                     continue
 
@@ -115,15 +120,21 @@ class ParseService:
                     checked.add(reverse_key)
 
                     if from_ in CARDS:
-                        card_out = price
-                        crypto_out = reverse_out
-                        if crypto_out > card_out:
-                            result.append(f"{to_} → {from_} ({crypto_out:.4f}) {from_} → {to_} ({card_out:.4f})")
+                        # from_ = карта (рубли), to_ = крипта
+                        rub_to_crypto = price
+                        crypto_to_rub = reverse_out
+                        if rub_to_crypto > crypto_to_rub:
+                            result.append(
+                                f"{from_} → {to_} ({rub_to_crypto:.4f}) > {to_} → {from_} ({crypto_to_rub:.4f})")
                     elif to_ in CARDS:
-                        card_out = reverse_out
-                        crypto_out = price
-                        if crypto_out > card_out:
-                            result.append(f"{from_} → {to_} ({crypto_out:.4f}) > {to_} → {from_} ({card_out:.4f}))")
+                        # from_ = крипта, to_ = карта (рубли)
+                        crypto_to_rub = price
+                        rub_to_crypto = reverse_out
+                        if rub_to_crypto > crypto_to_rub:
+                            result.append(
+                                f"{to_} → {from_} ({rub_to_crypto:.4f}) > {from_} → {to_} ({crypto_to_rub:.4f})")
+                else:
+                    logger.debug(f"No reverse pair for {from_} → {to_}")
 
             if result:
                 logger.info(f"Found {len(result)} pairs with different rates")
