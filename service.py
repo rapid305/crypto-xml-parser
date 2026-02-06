@@ -28,7 +28,7 @@ class ParseService:
     async def get_request(self) -> str:
         """Makes an asynchronous GET request to the parse URL."""
         async with httpx.AsyncClient(timeout=self.timeout, follow_redirects=True) as client:
-            response = await client.get(self.parse_url, headers=self.headers)
+            response = await client.get(self.parse_url)
             response.raise_for_status()
             return response.text
 

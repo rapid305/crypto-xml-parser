@@ -1,11 +1,16 @@
 services:
-  bot:
+  gbbot:
     build: .
-    env_file:
-      - .env
+    environment:
+      - BOT_TOKEN=${GB_BOT_TOKEN}
+      - PARSE_URL=${GB_PARSE_URL}
+      - PARSE_INTERVAL=${PARSE_INTERVAL}
     restart: always
-    ports:
-      - "8000:8000"
 
-
-
+  bbot:
+    build: .
+    environment:
+      - BOT_TOKEN=${BB_BOT_TOKEN}
+      - PARSE_URL=${BB_PARSE_URL}
+      - PARSE_INTERVAL=${PARSE_INTERVAL}
+    restart: always
