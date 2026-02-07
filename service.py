@@ -89,8 +89,8 @@ class ParseService:
         Parses XML from the parse URL and filters items based on the course value.
         """
         try:
-            # text = await self.get_request()
-            text = self.data_test()
+            text = await self.get_request()
+            # text = self.data_test()
             return self.parse_xml_text(text)
 
         except httpx.HTTPStatusError as e:
