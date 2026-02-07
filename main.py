@@ -93,10 +93,9 @@ async def periodic_parse(bot: Bot) -> None:
                 data = await parse_service.parse_xml()
 
                 if data:
-                    text = f"📈 Курсы валют:\n\n{chr(10).join(data)}"
                     for chat_id in list(SUBSCRIBERS):
-                        await send_message_safe(bot, chat_id, text)
-                        await bot.send_message(chat_id, "---")
+                        for item in data:
+                            await send_message_safe(bot, chat_id, item)
                 else:
                     logger.debug("No data matching criteria")
             else:
