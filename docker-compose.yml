@@ -7,10 +7,10 @@ services:
       - PARSE_INTERVAL=${PARSE_INTERVAL}
     restart: always
 
-  bbot:
-    build: .
-    environment:
-      - BOT_TOKEN=${BB_BOT_TOKEN}
-      - PARSE_URL=${BB_PARSE_URL}
-      - PARSE_INTERVAL=${PARSE_INTERVAL}
-    restart: always
+  # bbot:
+  #   build: .
+  #   environment:
+  #     - BOT_TOKEN=${BB_BOT_TOKEN}
+  #     - PARSE_URL=${BB_PARSE_URL}
+  #     - PARSE_INTERVAL=${PARSE_INTERVAL}
+    # restart: always
