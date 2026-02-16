@@ -153,8 +153,8 @@ class ParseService:
                     continue
 
                 # Calculate the difference and percentage
-                if rub_to_crypto > 0:
-                    diff = crypto_to_rub - rub_to_crypto
+                if rub_to_crypto > 0 and crypto_to_rub < rub_to_crypto:
+                    diff = rub_to_crypto - crypto_to_rub
                     percentage_diff = (diff / rub_to_crypto) * 100
                     
                     # Alert only if difference is less than 0.5%
