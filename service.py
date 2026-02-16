@@ -153,25 +153,11 @@ class ParseService:
                     continue
 
                 # Calculate the difference and percentage
-                diff = crypto_to_rub - rub_to_crypto
-                
-                # Rub->Crypto should be greater; otherwise rate is broken.
-                if rub_to_crypto <= crypto_to_rub:
-                    # Rate is completely broken (inverted)
-                    result.append(
-                        "\n".join([
-                            f"‼️<b>Курс сломан: {crypto} - {card}</b>",
-                            f"{card} → {crypto} ({rub_to_crypto:.4f})",
-                            "&lt;",
-                            f"{crypto} → {card} ({crypto_to_rub:.4f})",
-                            f"<b>разница: {diff:.4f}</b>",
-                        ])
-                    )
-                elif rub_to_crypto > 0:
-                    # Calculate percentage difference
+                if rub_to_crypto > 0:
+                    diff = crypto_to_rub - rub_to_crypto
                     percentage_diff = (diff / rub_to_crypto) * 100
                     
-                    # Alert if difference is less than 0.5%
+                    # Alert only if difference is less than 0.5%
                     if percentage_diff < 0.5:
                         result.append(
                             "\n".join([
