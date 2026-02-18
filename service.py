@@ -9,6 +9,7 @@ load_dotenv()
 logger = logging.getLogger(__name__)
 
 CARDS = ("CARDRUB" , "TCSBRUB" , "SBERRUB", "SBPRUB")
+ALLOWED_CRYPTO = ("USDTTRC20", "USDTBEP20", "USDTERC20", "BTC", "ETH")
 
 
 class ParseService:
@@ -152,6 +153,10 @@ class ParseService:
                 else:
                     continue
 
+                # Filter only allowed crypto currencies
+                if crypto not in ALLOWED_CRYPTO:
+                    continue
+
                 # Rub->Crypto should be greater; otherwise rate is broken.
                 if rub_to_crypto <= crypto_to_rub:
                     # Rate is completely broken (inverted)
@@ -170,8 +175,8 @@ class ParseService:
                     diff = rub_to_crypto - crypto_to_rub
                     percentage_diff = (diff / rub_to_crypto) * 100
                     
-                    # Alert only if difference is less than 0.5%
-                    if percentage_diff < 0.5:
+                    # Alert only if difference is less than 0.3%
+                    if percentage_diff < 0.3:
                         result.append(
                             "\n".join([
                                 f"⚠️<b>Курс близкий: {crypto} - {card}</b>",
