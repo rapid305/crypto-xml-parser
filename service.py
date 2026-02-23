@@ -175,8 +175,8 @@ class ParseService:
                     diff = rub_to_crypto - crypto_to_rub
                     percentage_diff = (diff / rub_to_crypto) * 100
                     
-                    # Alert only if difference is less than 0.3%
-                    if percentage_diff < 0.3:
+                    # Alert only if difference is less than 0.4%
+                    if percentage_diff < 0.4:
                         result.append(
                             "\n".join([
                                 f"⚠️<b>Курс близкий: {crypto} - {card}</b>",
