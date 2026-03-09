@@ -5,6 +5,7 @@ services:
       - BOT_TOKEN=${GB_BOT_TOKEN}
       - PARSE_URL=${GB_PARSE_URL}
       - PARSE_INTERVAL=${PARSE_INTERVAL}
+      - DIFFERENCE_THRESHOLD=${DIFFERENCE_THRESHOLD}
     restart: always
 
   bbot:
@@ -13,4 +14,5 @@ services:
       - BOT_TOKEN=${BB_BOT_TOKEN}
       - PARSE_URL=${BB_PARSE_URL}
       - PARSE_INTERVAL=${PARSE_INTERVAL}
+      - DIFFERENCE_THRESHOLD=${DIFFERENCE_THRESHOLD}
     restart: always
