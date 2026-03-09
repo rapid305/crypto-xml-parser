@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 CARDS = ("CARDRUB" , "TCSBRUB" , "SBERRUB", "SBPRUB")
 ALLOWED_CRYPTO = ("USDTTRC20", "USDTBEP20", "USDTERC20", "BTC", "ETH")
 
+DIFFERENCE_THRESHOLD = float(os.getenv('DIFFERENCE_THRESHOLD', 0.3))
+
 
 class ParseService:
     def __init__(self):
@@ -175,8 +177,8 @@ class ParseService:
                     diff = rub_to_crypto - crypto_to_rub
                     percentage_diff = (diff / rub_to_crypto) * 100
                     
-                    # Alert only if difference is less than 0.4%
-                    if percentage_diff < 0.4:
+                    # Alert only if difference is less than the threshold
+                    if percentage_diff < DIFFERENCE_THRESHOLD:
                         result.append(
                             "\n".join([
                                 f"⚠️<b>Курс близкий: {crypto} - {card}</b>",
