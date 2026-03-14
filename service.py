@@ -163,13 +163,14 @@ class ParseService:
                 if rub_to_crypto <= crypto_to_rub:
                     # Rate is completely broken (inverted)
                     diff = crypto_to_rub - rub_to_crypto
+                    percentage_diff = (diff / rub_to_crypto) * 100 if rub_to_crypto > 0 else 0.0
                     result.append(
                         "\n".join([
                             f"‼️<b>Курс сломан: {crypto} - {card}</b>",
                             f"{card} → {crypto} ({rub_to_crypto:.4f})",
                             "&lt;",
                             f"{crypto} → {card} ({crypto_to_rub:.4f})",
-                            f"<b>разница: {diff:.4f}</b>",
+                            f"<b>разница: {diff:.4f} ({percentage_diff:.2f}%)</b>",
                         ])
                     )
                 
